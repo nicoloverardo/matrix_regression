@@ -3,6 +3,7 @@
 Original module: https://github.com/idoshlomo/online_vectorizers
 Re-imported here to avoid using submodules
 """
+
 import logging
 from collections import defaultdict
 from itertools import chain
@@ -12,8 +13,8 @@ import scipy.sparse as sp
 from sklearn.feature_extraction.text import (
     CountVectorizer,
     TfidfTransformer,
-    _make_int_array,
     _document_frequency,
+    _make_int_array,
 )
 
 logger = logging.getLogger(__name__)
@@ -65,6 +66,7 @@ class OnlineCountVectorizer(CountVectorizer):
                 zip(
                     oov_tokens,
                     list(range(max_index + 1, max_index + 1 + len(oov_tokens), 1)),
+                    strict=False,
                 )
             )
             self.vocabulary_.update(oov_vocabulary)
@@ -122,7 +124,7 @@ class OnlineCountVectorizer(CountVectorizer):
 class OnlineTfidfVectorizer(OnlineCountVectorizer):
     """Scikit-learn TfidfVectorizer with online learning"""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         input="content",
         encoding="utf-8",
@@ -149,24 +151,28 @@ class OnlineTfidfVectorizer(OnlineCountVectorizer):
         which is hard set to True.
         """
         super().__init__(
-            input,
-            encoding,
-            decode_error,
-            strip_accents,
-            lowercase,
-            preprocessor,
-            tokenizer,
-            stop_words,
-            token_pattern,
-            ngram_range,
-            analyzer,
-            max_df,
-            min_df,
-            max_features,
-            vocabulary,
-            binary,
-            dtype,
+            input=input,
+            encoding=encoding,
+            decode_error=decode_error,
+            strip_accents=strip_accents,
+            lowercase=lowercase,
+            preprocessor=preprocessor,
+            tokenizer=tokenizer,
+            stop_words=stop_words,
+            token_pattern=token_pattern,
+            ngram_range=ngram_range,
+            analyzer=analyzer,
+            max_df=max_df,
+            min_df=min_df,
+            max_features=max_features,
+            vocabulary=vocabulary,
+            binary=binary,
+            dtype=dtype,
         )
+        self.norm = norm
+        self.smooth_idf = smooth_idf
+        self.sublinear_tf = sublinear_tf
+        self.use_idf = True  # Hard-set as per the comment
         self._tfidf = TfidfTransformer(
             norm=norm, use_idf=True, smooth_idf=smooth_idf, sublinear_tf=sublinear_tf
         )
@@ -255,16 +261,20 @@ class OnlineTfidfVectorizer(OnlineCountVectorizer):
 
     @property
     def idf_(self):
-        return np.ravel(self._tfidf._idf_diag.sum(axis=0))
+        return self._tfidf.idf_
 
     def _update_idf(self):
         """Update the idf and _idf_diag attributes given updated values for document-frequency matrix, n_samples and
         n_features.
         """
-        self._tfidf.idf = (
+        self._tfidf.idf_ = (
             np.log(float(self.n_samples) / (self.df + int(self._tfidf.smooth_idf)))
             + 1.0
         )
         self._tfidf._idf_diag = sp.spdiags(
-            self._tfidf.idf, diags=0, m=self.n_features, n=self.n_features, format="csr"
+            self._tfidf.idf_,
+            diags=0,
+            m=self.n_features,
+            n=self.n_features,
+            format="csr",
         )
