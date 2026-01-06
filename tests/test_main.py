@@ -1,8 +1,10 @@
 import numpy as np
-from matrixregr.matrixregression import MatrixRegression
+from matrixreg.matrixregression import MatrixRegression
 from sklearn.model_selection import train_test_split
 
+import pytest
 
+@pytest.fixture(scope="session", name="dummy_data")
 def get_dummy_data():
     X = np.array(
         [
@@ -36,13 +38,15 @@ def get_dummy_data():
 
 
 def test_loading_instance():
-    mr = MatrixRegression()
+    threshold=0.3
+    mr = MatrixRegression(threshold=threshold)
 
     assert isinstance(mr, MatrixRegression)
+    assert mr.threshold == threshold
 
 
-def test_fit():
-    X_train, X_test, y_train, y_test = get_dummy_data()
+def test_fit(dummy_data):
+    X_train, X_test, y_train, y_test = dummy_data
 
     mr = MatrixRegression()
     mr.fit(X_train, y_train)
@@ -56,8 +60,8 @@ def test_fit():
     assert mr.W.shape != old_shape
 
 
-def test_predict():
-    X_train, X_test, y_train, y_test = get_dummy_data()
+def test_predict(dummy_data):
+    X_train, X_test, y_train, y_test = dummy_data
 
     mr = MatrixRegression()
     mr.fit(X_train, y_train)
