@@ -42,7 +42,7 @@ class MatrixRegression(BaseEstimator, ClassifierMixin):
     421 - 426. 10.1109/CBMS.2007.108.
     """
 
-    def __init__(self, threshold: float = None, n_jobs: int = None):
+    def __init__(self, threshold: float | None = None, n_jobs: int | None = None):
         self.threshold = threshold
         self.n_jobs = n_jobs
 
