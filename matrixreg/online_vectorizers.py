@@ -66,6 +66,7 @@ class OnlineCountVectorizer(CountVectorizer):
                 zip(
                     oov_tokens,
                     list(range(max_index + 1, max_index + 1 + len(oov_tokens), 1)),
+                    strict=False,
                 )
             )
             self.vocabulary_.update(oov_vocabulary)
@@ -123,7 +124,7 @@ class OnlineCountVectorizer(CountVectorizer):
 class OnlineTfidfVectorizer(OnlineCountVectorizer):
     """Scikit-learn TfidfVectorizer with online learning"""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         input="content",
         encoding="utf-8",

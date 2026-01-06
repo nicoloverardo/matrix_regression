@@ -1,8 +1,9 @@
 import numpy as np
-from matrixreg.matrixregression import MatrixRegression
+import pytest
 from sklearn.model_selection import train_test_split
 
-import pytest
+from matrixreg.matrixregression import MatrixRegression
+
 
 @pytest.fixture(scope="session", name="dummy_data")
 def get_dummy_data():
@@ -38,7 +39,7 @@ def get_dummy_data():
 
 
 def test_loading_instance():
-    threshold=0.3
+    threshold = 0.3
     mr = MatrixRegression(threshold=threshold)
 
     assert isinstance(mr, MatrixRegression)

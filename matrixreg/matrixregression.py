@@ -191,7 +191,7 @@ class MatrixRegression(BaseEstimator, ClassifierMixin):
         """
 
         if isinstance(y, np.ndarray):
-            if y.ndim == 2:
+            if y.ndim == 2:  # noqa: PLR2004
                 return y.shape[1]
 
             return 1

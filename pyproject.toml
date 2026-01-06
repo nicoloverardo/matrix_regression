@@ -36,7 +36,11 @@ dependencies = [
 ]
 
 [dependency-groups]
-dev = ["pytest>=8.0.1", "pytest-cov>=3.0.0"]
+dev = [
+    "pytest>=8.0.1",
+    "pytest-cov>=3.0.0",
+    "ruff>=0.14.10,<1.0.0",
+]
 
 [tool.flit.module]
 name = "matrixreg"
