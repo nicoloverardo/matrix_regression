@@ -8,6 +8,9 @@ Multi-label text classification algorithm for online learning.
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/matrixreg)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/matrixreg)
 ![GitHub](https://img.shields.io/github/license/nicoloverardo/matrix_regression?color=green)
+[![CI Pipeline](https://github.com/nicoloverardo/matrix_regression/actions/workflows/ci.yaml/badge.svg)](https://github.com/nicoloverardo/matrix_regression/actions/workflows/ci.yaml)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ## Description
