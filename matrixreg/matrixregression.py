@@ -9,10 +9,12 @@ License: MIT License
 """
 
 import multiprocessing
+
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.preprocessing import MinMaxScaler
-from matrixregr.online_vectorizers import OnlineTfidfVectorizer
+
+from matrixreg.online_vectorizers import OnlineTfidfVectorizer
 
 
 class MatrixRegression(BaseEstimator, ClassifierMixin):
@@ -40,7 +42,7 @@ class MatrixRegression(BaseEstimator, ClassifierMixin):
     421 - 426. 10.1109/CBMS.2007.108.
     """
 
-    def __init__(self, threshold: float = None, n_jobs: int = None):
+    def __init__(self, threshold: float | None = None, n_jobs: int | None = None):
         self.threshold = threshold
         self.n_jobs = n_jobs
 
@@ -78,17 +80,13 @@ class MatrixRegression(BaseEstimator, ClassifierMixin):
 
         n_categories = self._get_number_catgories(y)
 
-        self.terms = np.array(self.vectorizer.get_feature_names(), dtype="object")
+        self.terms = np.array(self.vectorizer.get_feature_names_out(), dtype="object")
 
         self.W = np.zeros((n_terms, n_categories))
 
         for d in range(n_documents):
-            x_nnz = X_tfidf[
-                d,
-            ].nonzero()[1]
-            y_nnz = y[
-                d,
-            ].nonzero()[0]
+            x_nnz = X_tfidf[d,].nonzero()[1]
+            y_nnz = y[d,].nonzero()[0]
 
             self._set_weights_values(X_tfidf, x_nnz, y_nnz, d)
 
@@ -147,22 +145,18 @@ class MatrixRegression(BaseEstimator, ClassifierMixin):
 
         n_documents = X_tfidf.shape[0]
 
-        self.terms = np.array(self.vectorizer.get_feature_names(), dtype="object")
+        self.terms = np.array(self.vectorizer.get_feature_names_out(), dtype="object")
 
         for d in range(n_documents):
             # Get only the terms that we need to update
             x_nnz = np.intersect1d(
-                X_tfidf[
-                    d,
-                ].nonzero()[1],
+                X_tfidf[d,].nonzero()[1],
                 terms_to_update,
             )
 
             # Still need to check that
             # x_nnz and/or y_nnz are not empty
-            y_nnz = y[
-                d,
-            ].nonzero()[0]
+            y_nnz = y[d,].nonzero()[0]
 
             # Set the weights of terms we need to update
             # to zero. This should be faster:
@@ -197,7 +191,7 @@ class MatrixRegression(BaseEstimator, ClassifierMixin):
         """
 
         if isinstance(y, np.ndarray):
-            if y.ndim == 2:
+            if y.ndim == 2:  # noqa: PLR2004
                 return y.shape[1]
 
             return 1
@@ -235,9 +229,7 @@ class MatrixRegression(BaseEstimator, ClassifierMixin):
 
             W_prime = np.dot(F, self.W)
 
-            y[
-                i,
-            ] = W_prime
+            y[i,] = W_prime
 
         return y
 
