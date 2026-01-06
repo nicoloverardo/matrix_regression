@@ -21,6 +21,5 @@ jobs:
       
       - name: Publish to PyPI
         env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+          UV_PUBLISH_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: uv publish
