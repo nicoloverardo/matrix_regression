@@ -37,6 +37,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "prek>=0.3.3",
     "pytest>=8.0.1",
     "pytest-cov>=3.0.0",
     "ruff>=0.14.10,<1.0.0",
