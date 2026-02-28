@@ -39,7 +39,7 @@ jobs:
         run: uv sync --all-extras --dev
 
       - name: Run tests
-        run: uv run pytest tests --cov=matrixreg --cov-report=term-missing --junitxml=junit.xml -o junit_family=legacy
+        run: uv run pytest tests --cov=matrixreg --cov-report=term-missing --cov-report=xml:coverage.xml --junitxml=junit.xml -o junit_family=legacy
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
