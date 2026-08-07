@@ -60,7 +60,7 @@ class OnlineCountVectorizer(CountVectorizer):
         oov_tokens = new_tokens.difference(set(self.vocabulary_.keys()))
 
         if oov_tokens:
-            logger.info("adding {} tokens".format(len(oov_tokens)))
+            logger.info(f"adding {len(oov_tokens)} tokens")
             max_index = max(self.vocabulary_.values())
             oov_vocabulary = dict(
                 zip(
@@ -124,7 +124,7 @@ class OnlineCountVectorizer(CountVectorizer):
 class OnlineTfidfVectorizer(OnlineCountVectorizer):
     """Scikit-learn TfidfVectorizer with online learning"""
 
-    def __init__(  # noqa: PLR0913
+    def __init__(  # noqa: PLR0913, PLR0917
         self,
         input="content",
         encoding="utf-8",
@@ -236,9 +236,7 @@ class OnlineTfidfVectorizer(OnlineCountVectorizer):
         X : array, [n_samples, n_features]
             Document-term matrix.
         """
-        logger.info(
-            "validate: checking {} records for new tokens".format(len(raw_documents))
-        )
+        logger.info(f"validate: checking {len(raw_documents)} records for new tokens")
         current_vocabulary_size = len(self.vocabulary_)
         X = super().partial_refit_transform(raw_documents)
         vocabulary_size_change = len(self.vocabulary_) - current_vocabulary_size

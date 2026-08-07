@@ -58,7 +58,7 @@ param_grid = [{"threshold": [0.3, 0.6, 0.9]}]
 
 # Initialization
 mr = MatrixRegression()
-clf = GridSearchCV(mr, param_grid, cv=5, verbose=10, n_jobs=-1, scoring='f1_micro')
+clf = GridSearchCV(mr, param_grid, cv=5, verbose=10, n_jobs=-1, scoring="f1_micro")
 
 # Fit
 clf.fit(X_train, y_train)
