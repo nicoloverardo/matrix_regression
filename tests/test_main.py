@@ -45,7 +45,7 @@ def get_dummy_data():
 @pytest.fixture
 def dummy_data_extended(dummy_data):
     """Extended dummy data with additional categories for partial_fit testing."""
-    X_train, X_test, y_train, y_test = dummy_data
+    X_train, _, y_train, _ = dummy_data
     # Add a new category
     y_extended = np.zeros((y_train.shape[0], y_train.shape[1] + 1), dtype=int)
     y_extended[:, :-1] = y_train
@@ -65,7 +65,7 @@ def test_threshold(dummy_data):
     threshold = -2
     mr = MatrixRegression(threshold=threshold)
 
-    X_train, X_test, y_train, y_test = dummy_data
+    X_train, _, y_train, _ = dummy_data
     with pytest.raises(ValueError):
         mr.fit(X_train, y_train)
 
@@ -80,7 +80,7 @@ def test_fit(dummy_data, threshold):
     mr = MatrixRegression(threshold=threshold)
     mr.fit(X_train, y_train)
 
-    old_shape = mr.W.shape + tuple()
+    old_shape = mr.W.shape + ()
 
     assert mr.W.shape != (0, 0)
 

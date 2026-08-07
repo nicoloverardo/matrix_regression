@@ -64,9 +64,8 @@ class MatrixRegression(BaseEstimator, ClassifierMixin):
             The target labels of the documents (i.e.: the categories)
         """
 
-        if self.threshold is not None:
-            if self.threshold <= 0 or self.threshold >= 1:
-                raise ValueError("The threshold must be between 0 and 1.")
+        if self.threshold is not None and (self.threshold <= 0 or self.threshold >= 1):
+            raise ValueError("The threshold must be between 0 and 1.")
 
         if self.n_jobs is None or self.n_jobs == 0:
             self.n_jobs = 1
@@ -222,7 +221,7 @@ class MatrixRegression(BaseEstimator, ClassifierMixin):
         for i in range(X.shape[0]):
             T_d = np.sort(np.array(tokenizer(X[i]), dtype="object"))
 
-            T_prime, x_ind, _ = np.intersect1d(self.terms, T_d, return_indices=True)
+            _, x_ind, _ = np.intersect1d(self.terms, T_d, return_indices=True)
 
             F = np.zeros(self.terms.shape[0])
             F[x_ind] = 1
